@@ -1,0 +1,238 @@
+<!-- /algorithms/binary-search/binarySearch.js -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Binary Search Visualization</title>
+    <style>
+      :root {
+        --primary: #2563eb;
+        --secondary: #475569;
+        --background: #f8fafc;
+        --card-bg: #ffffff;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--background);
+        color: var(--secondary);
+        line-height: 1.5;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      nav {
+        margin-bottom: 2rem;
+      }
+
+      .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--secondary);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s;
+      }
+
+      .back-button:hover {
+        background-color: #e2e8f0;
+      }
+
+      .visualization-container {
+        background: var(--card-bg);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      }
+
+      .controls {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      input {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.5rem;
+        width: 120px;
+      }
+
+      button {
+        padding: 0.5rem 1rem;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      button:hover {
+        background-color: #1d4ed8;
+      }
+
+      button:disabled {
+        background-color: #94a3b8;
+        cursor: not-allowed;
+      }
+
+      .array-container {
+        display: flex;
+        align-items: flex-end;
+        height: 300px;
+        gap: 2px;
+        padding: 1.5rem;
+        background-color: #f8fafc;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .array-bar {
+        flex: 1;
+        background-color: #64748b;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        color: white;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+        padding-bottom: 0.25rem;
+      }
+
+      .array-bar.current {
+        background-color: #22c55e;
+      }
+
+      .array-bar.range {
+        background-color: var(--primary);
+      }
+
+      .status {
+        background-color: #f1f5f9;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .explanation {
+        background: var(--card-bg);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .metric-card {
+        background-color: #f1f5f9;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        text-align: center;
+      }
+
+      .metric-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+      }
+
+      .metric-label {
+        font-size: 0.875rem;
+        color: var(--secondary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <nav>
+        <a href="/" class="back-button"> ← Back to Algorithms </a>
+      </nav>
+
+      <h1>Binary Search Visualization</h1>
+
+      <!-- Explanation -->
+      <div class="explanation">
+        <h2>How Binary Search Works</h2>
+        <p>
+          Binary search is an efficient algorithm for finding a target value
+          within a sorted array. It works by repeatedly dividing the search
+          interval in half:
+        </p>
+        <ol>
+          <li>Compare the target value with the middle element of the array</li>
+          <li>
+            If the target matches the middle element, the search is complete
+          </li>
+          <li>
+            If the target is less than the middle element, continue searching in
+            the lower half
+          </li>
+          <li>
+            If the target is greater than the middle element, continue searching
+            in the upper half
+          </li>
+          <li>
+            Repeat this process until the target is found or it's determined
+            that the target is not in the array
+          </li>
+        </ol>
+      </div>
+
+      <div class="visualization-container">
+        <div class="controls">
+          <input
+            type="number"
+            id="searchInput"
+            placeholder="Search for..."
+            min="1"
+            max="100"
+          />
+          <button id="searchBtn">Search</button>
+          <button id="nextBtn" disabled>Next Step</button>
+          <button id="resetBtn">Reset</button>
+        </div>
+        <div class="array-container" id="arrayContainer"></div>
+        <div class="status" id="status">Ready to search...</div>
+
+        <!-- Search Analysis -->
+        <div id="searchAnalysis"></div>
+
+        <!-- Metrics -->
+        <div class="metrics" id="metrics" style="display: none">
+          <div class="metric-card">
+            <div class="metric-value" id="stepsCount">0</div>
+            <div class="metric-label">Steps Taken</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="timeComplexity">O(log n)</div>
+            <div class="metric-label">Time Complexity</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="spaceComplexity">O(1)</div>
+            <div class="metric-label">Space Complexity</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="binarySearch.js"></script>
+  </body>
+</html>

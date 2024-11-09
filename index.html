@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Algorithm Visualization Platform</title>
+    <link rel="stylesheet" href="styles.css" type="text/css"/>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Algorithm Visualization Platform</h1>
+        <p class="subtitle">
+          Interactive visualizations to help you understand how different
+          algorithms work, step by step, with detailed explanations and
+          complexity analysis.
+        </p>
+      </header>
+
+      <div id="algorithm-grid" class="algorithm-grid">
+        <!-- Algorithm cards will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <script>
+      // The algorithms data
+      const algorithms = [
+        {
+          name: "binary-search",
+          description:
+            "Efficiently find an element in a sorted array by repeatedly dividing the search range in half.",
+          tags: ["Search", "O(log n)", "Divide & Conquer"],
+        },
+        // {
+        //     name: 'simple-search',
+        //     description: 'A straightforward search algorithm that checks each element in sequence.',
+        //     tags: ['Search', 'O(n)', 'Linear']
+        // }
+        // Add more algorithms here as needed
+      ];
+
+      // Function to create an algorithm card
+      function createAlgorithmCard(algorithm) {
+        const card = document.createElement("div");
+        card.className = "algorithm-card";
+        card.onclick = () =>
+          (window.location.href = `/algorithms/${algorithm.name}/${algorithm.name}.html`);
+
+        const displayName = algorithm.name.replace(/-/g, " ");
+
+        card.innerHTML = `
+                <div class="card-header">
+                    <div class="algorithm-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <h2 class="algorithm-name">${displayName}</h2>
+                </div>
+                <p class="algorithm-description">${algorithm.description}</p>
+                <div class="algorithm-meta">
+                    ${algorithm.tags
+                      .map((tag) => `<span class="tag">${tag}</span>`)
+                      .join("")}
+                </div>
+            `;
+
+        return card;
+      }
+
+      // Function to render algorithm cards
+      function renderAlgorithmCards() {
+        const grid = document.getElementById("algorithm-grid");
+        algorithms.forEach((algorithm) => {
+          const card = createAlgorithmCard(algorithm);
+          grid.appendChild(card);
+        });
+      }
+
+      // Render the algorithm cards when the page loads
+      window.addEventListener("load", renderAlgorithmCards);
+    </script>
+  </body>
+</html>
