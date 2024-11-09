@@ -1,4 +1,4 @@
-# JavaScript Algorithms and Visualizations
+# Data Structures and Algorithms with JavaScript
 
 This repository is my journey in learning data structures, algorithms, and core JavaScript. I aim to understand algorithms deeply by implementing them from scratch in pure JavaScript and visualizing them using the HTML Canvas API.
 
